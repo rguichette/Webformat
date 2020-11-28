@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var FileHandler_1 = __importDefault(require("./FileHandler"));
 // console.log("hi..");
-var t = new FileHandler_1.default("./files/pattern.txt");
+var t = new FileHandler_1.default("./files/testFile.txt");
 console.log("running.-.size", t.fileSize);
 t.filterToJustMovies().getMoviesList();
 // t.getProgress()

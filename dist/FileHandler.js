@@ -42,13 +42,13 @@ var FileHandler = /** @class */ (function () {
                 _this.readData.resume();
             }, 1000);
         });
-        console.log(this.movies);
+        // console.log(this.movies);
         return this;
     };
     FileHandler.prototype.getProgress = function () {
         var _this = this;
         this.readData.on("pause", function () {
-            console.log("progress is ...., " + Math.floor((_this.readData.bytesRead / _this.fileSize) * 100) + " %");
+            // console.log(`progress is ...., ${Math.floor( (this.readData.bytesRead/this.fileSize ) * 100)} %`);
             return _this;
         });
         // this.readData.on("end",()=>{
@@ -95,9 +95,13 @@ function clearToJson(data) {
     var readProp = false;
     var formatted = '';
     while (i < data.length) {
+        // add braces at begin of object starting from "name"
         if (data[i] == "{") {
-            formatted += data[i];
+            // formatted+=data[i]  
             startReading = true;
+        }
+        if (data[i] == "=" && data[i + 1] == '"' && data[i + 2] == "n") {
+            formatted += "{";
         }
         if (data[i] == "{" && data[i + 1] == '"') {
             startReading = false;
@@ -110,8 +114,11 @@ function clearToJson(data) {
             // formatted+=data[i];
             startReading = false;
         }
-        if (data[i] == "}" && data[i + 1] == "}") {
+        //todo: fix a bug here
+        if (data[i] == "}" && data[i + 1] == "}" && data[i - 1] == '"'
+            && data[i + 2] !== "}" && data[i + 2] !== "(") {
             formatted += "},";
+            // console.log(data[i-1]+data[i]+data[i+1]);
         }
         if (data[i + 1] == ">" && data[i] == '"') {
             formatted += data[i];
@@ -141,13 +148,13 @@ function clearToJson(data) {
         if (data[i] == ',' && data[i - 1] == '"' && data[i - 2] == ">") {
             startReading = true;
         }
+        //print out patterns after '}'
         if (startReading) {
-            console.log(data[i], data[i - 1]);
             formatted += data[i];
         }
         i++;
     }
-    //todo remove last comma
-    formatted.slice(0, -1);
-    console.log(formatted);
+    //todo remove last comma in secon round of cleaning
+    var cleanedEnd = formatted.substring(0, formatted.length - 1);
+    console.log(cleanedEnd);
 }

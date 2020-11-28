@@ -38,7 +38,7 @@ filterToJustMovies(){
   })
 
 
-  console.log(this.movies);
+  // console.log(this.movies);
   
 
   return this
@@ -47,7 +47,7 @@ filterToJustMovies(){
 
 getProgress(){
   this.readData.on("pause", ()=>{
-  console.log(`progress is ...., ${Math.floor( (this.readData.bytesRead/this.fileSize ) * 100)} %`);
+  // console.log(`progress is ...., ${Math.floor( (this.readData.bytesRead/this.fileSize ) * 100)} %`);
 return this;
   })
   
@@ -117,12 +117,22 @@ let formatted = ''
 
 while (i < data.length){
 
-if(data[i] == "{"){
-  formatted+=data[i]  
+// add braces at begin of object starting from "name"
+
+
+
+if(data[i] == "{" ){
+  // formatted+=data[i]  
+ 
   startReading = true
 } 
 
+if(data[i] == "=" && data[i+1] == '"' && data[i+2] =="n"){
+  formatted += "{"
+}
+
 if(data[i] == "{" && data[i+1] == '"'){
+
   startReading = false
 }
 
@@ -138,9 +148,14 @@ if(data[i - 1]=="="){
   // formatted+=data[i];
   startReading = false
 }
-
-if(data[i]=="}" && data[i +1 ]=="}"){
+//todo: fix a bug here
+if(data[i]=="}" && data[i +1 ]=="}" && data[i-1] =='"'
+&& data[i+2]!=="}" && data[i+2]!=="(" 
+){
   formatted+="},"
+
+  // console.log(data[i-1]+data[i]+data[i+1]);
+
 }
 
 
@@ -182,11 +197,11 @@ startReading = true;
 if(data[i] == ',' && data[i-1] == '"' && data[i-2] == ">"){
   startReading = true;
 }
- 
-if(startReading){
-  console.log(data[i], data[i-1]);
-  
-  
+
+//print out patterns after '}'
+
+
+if(startReading){  
   formatted+=data[i]
 }
 
@@ -201,9 +216,9 @@ if(startReading){
 
   i++
 }
-//todo remove last comma
-  formatted.slice(0,-1)
+//todo remove last comma in secon round of cleaning
+let cleanedEnd = formatted.substring(0, formatted.length-1);
 
-console.log(formatted);
+console.log(cleanedEnd);
 
 }
